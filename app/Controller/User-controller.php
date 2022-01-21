@@ -1,12 +1,9 @@
+<?php include "../../config.php"; ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">  
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	<title></title>
+    <?php  include FOLDER_TEMPLATE.'/head.php'; ?>
 </head>
 <body>
 
@@ -14,30 +11,61 @@
 
 include "../Model/User-model.php";
 
-
 $obUser = new User ();
-
-if (isset($_POST['submit'])) {
-    $inputDocument=$_POST['Document'];
-    $inputPass=$_POST['Pass'];
-        if($_POST['Document'] == "" ||  $_POST['Pass']=="") {
-            echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'> <h3>¡ERROR!</h3><hr>Debe de llenar todos los campos";
-            echo " <button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
-            echo " <span aria-hidden='true'>&times;</span></button></div>";
+if(isset($_POST['Document']) && isset($_POST['Pass'])){
+    $user = $_POST['Document'];
+    $password = $_POST['Pass'];
+    if($user=="'' or '1'='1'" || $password=="'' or '1'='1'"){
+      echo('<script>swal("Error!", "Invalid data","error")</script>');
+    }
+    else{
+      $validate = $obUser->validateCorrectData($user,$password);
+      if (is_array($validate) || is_object($validate))
+        {foreach($validate as $validateCheck) {
+          $quantity=$validateCheck['Existing data'];
         }
-            if ($obUser->userExistent ($inputDocument, $inputPass)==true) {
-                if ($obUser->Rol($inputDocument)==true) {
-                    header("Location:../View/Usermenu-view.php");
-                } 
-                    elseif ($obUser->Rol($inputDocument)==false) {
-                        header("Location:../View/Usermenu2-view.php");
-                    }
-            }
-                else {  
-                    header("Location:../../index.php");
-                }
-}
+      }else{
+        $quantity =="0";
+      }
+      $existence = $obUser->validateExistence($user);
+      if (is_array($existence) || is_object($existence))
+        {foreach($existence as $existence1) {
+          $existenceUser=$existence1['Existing quantity'];
+        }
+      }else{
+        $existenceUser ="0";
+      }
+      $rows = $obUser->validateLogin($user);
+      if (is_array($rows) || is_object($rows))
+        {foreach($rows as $row) {
+          $role=$row['rolUsuario'];
+          $stateU=$row['estadoUsuario'];
+        }
+      }else{
+        $role ="0";
+        $stateU ="0";
+      }
+      $ValidateLogin = $obUser->validateUserLogin($user,$password,$role,$stateU);
+      $UQuantity=null;
+      if (is_array($ValidateLogin) || is_object($ValidateLogin))
+        {foreach($ValidateLogin as $ValidateLoginU) {
+          $UQuantity=$ValidateLoginU['Quantity'];
+        }
+      }
+      else if($user=="" || $password==""){
+        echo('<script>swal("Error!", "Debe ingresar datos al formulario para iniciar sesión","error")</script>');
+      }else if($existenceUser=='0'){
+        echo('<script>swal("Error!", "Usuario no registrado en el sistema","error")</script>');
+      }else if($UQuantity!= '1' && $quantity=="0"){
+        echo('<script>swal("Error!", "Datos ingresados erroneos, intentelo nuevamente","error")</script>');
+      }else if($stateU=='0' && $quantity=="1"){
+        echo '<div class="alert alert-warning"><strong>Usuario Inhabilitado!</strong> Si cree que se trata de un error, por favor comuníquese con Recepción.</div>';
+      }
+    }
+  }
 ?>
 
 </body>
 </html>
+
+

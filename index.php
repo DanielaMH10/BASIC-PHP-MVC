@@ -15,13 +15,13 @@
 					<!--<span class="login100-form-title p-b-48"><i class="zmdi zmdi-font"></i></span>-->
 
 					<div class="wrap-input100 validate-input">
-						<input class="input100" type="number" name="Document" id="Document" required>
+						<input class="input100" type="number" name="Document" id="Document" >
 						<span class="focus-input100" data-placeholder="Document"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input">
 						<span class="btn-show-pass"><i class="zmdi zmdi-eye"></i></span>
-						<input class="input100" type="password" name="Pass" id="Pass" required>
+						<input class="input100" type="password" name="Pass" id="Pass" >
 						<span class="focus-input100" data-placeholder="Password"></span>
 					</div>
 
@@ -38,20 +38,9 @@
 		</div>
 	</div>
 	<div id="dropDownSelect1"></div>
-
-        <!--<form id="Form" action="<?= URL_CONTROLLER ?>User-controller.php" method="POST">
-            <h1 class="exampleone">Sign-in</h1><br/>
-            <div class="mb-3">
-                <label class="form-label">Document <input type="number" class="form-control" id="Document" name="Document" required/></label>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Password <input class="form-control" type="password" id="Pass" name="Pass" required/></label>
-            </div>
-                <button type="submit" class="btn btn-primary" name="submit" id="submit" name="submit">Submit</button>
-        </form>-->
-        <?php include FOLDER_TEMPLATE . 'scriptsLogin.php' ?>
+    <?php include FOLDER_TEMPLATE . 'scriptsLogin.php' ?>
     </body>
-    </html>
+</html>
 
 
     

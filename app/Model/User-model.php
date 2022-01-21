@@ -32,6 +32,62 @@ class User {
         }
         $connection = null;
     }
+
+    public function validateCorrectData($identnumberUser,$passwordUser){
+        $rows=null;
+        $status=1;
+        $model = new Conexion();
+        $connection = $model->getConection();					
+        $sql = "SELECT COUNT(*) AS 'Existing data' FROM USUARIO WHERE idUsuario='".$identnumberUser."' AND passwordUsuario='".$passwordUser."'";
+        $statement=$connection->prepare($sql);			
+        $statement->execute();
+        while ($result=$statement->fetch()) {
+            $rows[]=$result;
+        }
+        return $rows;
+    }
+
+    public function validateExistence($identnumberUser){
+        $rows=null;
+        $status=1;
+        $model = new Conexion();
+        $connection = $model->getConection();					
+        $sql="SELECT COUNT(*) AS 'Existing quantity' FROM USUARIO WHERE idUsuario='".$identnumberUser."'";
+        $statement=$connection->prepare($sql);			
+        $statement->execute();
+        while ($result=$statement->fetch()) {
+            $rows[]=$result;
+        }
+        return $rows;
+    }
+
+    public function validateLogin($identnumberUser){
+        $rows=null;
+        $status=1;
+        $model = new Conexion();
+        $connection = $model->getConection();					
+        $sql="SELECT rolUsuario, estadoUsuario FROM USUARIO WHERE idUsuario='".$identnumberUser."'";
+        $statement=$connection->prepare($sql);			
+        $statement->execute();
+        while ($result=$statement->fetch()) {
+            $rows[]=$result;
+        }
+        return $rows;
+    }
+    
+    public function validateUserLogin($identnumberUser,$passwordUser,$role,$state){
+			$rows=null;
+			$status=1;
+			$model = new Conexion();
+			$connection = $model->getConection();					
+			$sql="SELECT COUNT(*) AS Quantity FROM USUARIO WHERE idUsuario=".$identnumberUser." AND passwordUsuario='".$passwordUser."' AND rolUsuario='".$role."' AND estadoUsuario=".$state."";
+			$statement=$connection->prepare($sql);			
+			$statement->execute();
+			while ($result=$statement->fetch()) {
+				$rows[]=$result;
+			}
+			return $rows;   
+}
 }
 
 ?>
