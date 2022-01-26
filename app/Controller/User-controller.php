@@ -39,10 +39,16 @@ if(isset($_POST['Document']) && isset($_POST['Pass'])){
       if (is_array($rows) || is_object($rows))
         {foreach($rows as $row) {
           $role=$row['rolUsuario'];
-          $stateU=$row['estadoUsuario'];
         }
       }else{
         $role ="0";
+      }
+      $stateUser=$obUser->validateLoginState($user);
+      if (is_array($stateUser) || is_object($stateUser))
+      {foreach($stateUser as $state) {
+        $stateU=$state['estadoUsuario'];
+      }
+      }else{
         $stateU ="0";
       }
       $ValidateLogin = $obUser->validateUserLogin($user,$password,$role,$stateU);
@@ -51,6 +57,15 @@ if(isset($_POST['Document']) && isset($_POST['Pass'])){
         {foreach($ValidateLogin as $ValidateLoginU) {
           $UQuantity=$ValidateLoginU['Quantity'];
         }
+      }
+      $rolRecepcionista = 1;
+      if($role == '1' && $UQuantity == "1" ){
+        die();
+        header('location: inicioRecepcionista.php');
+      }
+      else if($role == '2' && $UQuantity == "1"){
+        die();
+        header('location: inicioInstructor.php');
       }
       else if($user=="" || $password==""){
         echo('<script>swal("Error!", "Debe ingresar datos al formulario para iniciar sesión","error")</script>');

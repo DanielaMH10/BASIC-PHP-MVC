@@ -66,7 +66,21 @@ class User {
         $status=1;
         $model = new Conexion();
         $connection = $model->getConection();					
-        $sql="SELECT rolUsuario, estadoUsuario FROM USUARIO WHERE idUsuario='".$identnumberUser."'";
+        $sql="SELECT rolUsuario FROM USUARIO WHERE idUsuario='".$identnumberUser."'";
+        $statement=$connection->prepare($sql);			
+        $statement->execute();
+        while ($result=$statement->fetch()) {
+            $rows[]=$result;
+        }
+        return $rows;
+    }
+
+    public function validateLoginState($identnumberUser){
+        $rows=null;
+        $status=1;
+        $model = new Conexion();
+        $connection = $model->getConection();					
+        $sql="SELECT estadoUsuario FROM USUARIO WHERE idUsuario='".$identnumberUser."'";
         $statement=$connection->prepare($sql);			
         $statement->execute();
         while ($result=$statement->fetch()) {

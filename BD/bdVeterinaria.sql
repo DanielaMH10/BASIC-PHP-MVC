@@ -13,7 +13,7 @@ CREATE TABLE USUARIO(
     telefonoUsuario VARCHAR (20) NOT NULL,
     direccionUsuario VARCHAR (50) NOT NULL,
     passwordUsuario VARCHAR (20) NOT NULL,
-    rolUsuario VARCHAR (20) NOT NULL,
+    idRolFK INT NOT NULL,
     estadoUsuario INT
 );
 
@@ -49,8 +49,7 @@ CREATE TABLE AGENDA (
 	idAgenda INT(12) NOT NULL,
      idMedicoFK INT(12) NOT NULL, 
      idPacienteFK INT(12) NOT NULL,
-	fechaAgenda DATE NOT NULL,
-    horaAgenda DATETIME,
+	fechaHoraAgenda DATETIME NOT NULL,
     consultorio VARCHAR (2) NOT NULL,
     estadoAgenda BIT
 );
@@ -72,7 +71,7 @@ CREATE TABLE EXAMEN (
 	idExamen INT(12) NOT NULL,
     idHistoriaFK INT(12) NOT NULL, 
     valor NUMERIC NOT NULL,
-    fechaExamen DATE NOT NULL,
+    fechaExamen DATETIME NOT NULL,
     tipoExamen VARCHAR (100)
 );
 
@@ -91,11 +90,21 @@ CREATE TABLE DIAGNOSTICO (
     idConsultaFK INT(12) NOT NULL, 
     descripcion TEXT NOT NULL
 );
-SELECT * FROM PACIENTE;
+
+/*CREACION DE LA TABLA ROL*/
+CREATE TABLE ROL (
+	idRol INT(12) NOT NULL,
+    nombreRol VARCHAR(12) NOT NULL
+);
+
+/*INDICES DE TABLA USUARIO*/
+ALTER TABLE ROL
+ADD PRIMARY KEY (idRol);
 
 /*INDICES DE TABLA USUARIO*/
 ALTER TABLE USUARIO
-ADD PRIMARY KEY (idUsuario);
+ADD PRIMARY KEY (idUsuario),
+ADD KEY FK_idRolFK_ROL_idx (idRolFK);
 
 /*INDICES DE LA TABLA PACIENTE/*/
 ALTER TABLE PACIENTE 
@@ -134,6 +143,10 @@ ADD KEY FK_idHistoriaFK_CONSULTA_MEDICA_idx (idHistoriaFK);
 ADD PRIMARY KEY (idDiagnostico),
 ADD KEY FK_idConsultaFK_DIAGNOSTICO_idx (idConsultaFK);
 
+/*FILTROS PARA LA TABLA USUARIO*/
+ALTER TABLE USUARIO
+ADD CONSTRAINT FK_idRolFK_USUARIO FOREIGN KEY (idRolFK)
+REFERENCES ROL (idRol) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 /*FILTROS PARA LA TABLA PACIENTE*/
 ALTER TABLE PACIENTE 
@@ -172,16 +185,22 @@ ALTER TABLE DIAGNOSTICO
 ADD CONSTRAINT FK_idConsultaFK_DIAGNOSTICO FOREIGN KEY (idConsultaFK)
 REFERENCES CONSULTA_MEDICA (idConsulta) ON DELETE NO ACTION ON UPDATE NO ACTION; 
 
+/*INSERTAR LOS RESITROS DE LA TABLA ROL*/
+INSERT INTO ROL (idRol, nombreRol)
+VALUES (1, 'Medico');
+INSERT INTO ROL (idRol, nombreRol)
+VALUES (2, 'Paciente');
+
 /*INSERTAR LOS REGISTROS DE LA TABLA USUARIO*/
  USE VETERINARIA;
  SHOW TABLES;
  DESCRIBE USUARIO;
- INSERT INTO USUARIO (idUsuario,nombreUsuario,apellidoUsuario,correoUsuario,telefonoUsuario,direccionUsuario,passwordusuario,rolUsuario,estadoUsuario)
-VALUES ('10741583747','Jairo','Rojas','pachemvzfusm@yahoo.es','3123118153', 'calle 5 a sur N3 a 04','jairo17','Medico','1');
-INSERT INTO USUARIO (IdUsuario,nombreUsuario,apellidoUsuario,correoUsuario,telefonoUsuario,direccionUsuario,passwordusuario,rolUsuario,estadoUsuario)
-VALUES ('1000216054','Daniela','Mora', 'danmora@hotmail.com', '3053714069','calle 13 N14-38','dani865','Paciente','1');
-INSERT INTO USUARIO (idUsuario,nombreUsuario,apellidoUsuario,correoUsuario,telefonoUsuario,direccionUsuario,passwordusuario,rolUsuario,estadoUsuario)
-VALUES ('1000621051','Nataly','Porras','nata@hotmail.com','3235648520','diag 24 N45-78','NATA90','Paciente','1');
+ INSERT INTO USUARIO (idUsuario,nombreUsuario,apellidoUsuario,correoUsuario,telefonoUsuario,direccionUsuario,passwordusuario,idRolFK,estadoUsuario)
+VALUES ('10741583747','Jairo','Rojas','pachemvzfusm@yahoo.es','3123118153', 'calle 5 a sur N3 a 04','jairo17','1','1');
+INSERT INTO USUARIO (IdUsuario,nombreUsuario,apellidoUsuario,correoUsuario,telefonoUsuario,direccionUsuario,passwordusuario,idRolFK,estadoUsuario)
+VALUES ('1000216054','Daniela','Mora', 'danmora@hotmail.com', '3053714069','calle 13 N14-38','dani865','2','1');
+INSERT INTO USUARIO (idUsuario,nombreUsuario,apellidoUsuario,correoUsuario,telefonoUsuario,direccionUsuario,passwordusuario,idRolFK,estadoUsuario)
+VALUES ('1000621051','Nataly','Porras','nata@hotmail.com','3235648520','diag 24 N45-78','NATA90','2','1');
 
 /*INSERTAR LOS REGISTROS DE LA TABLA MEDICO*/
 USE VETERINARIA;
@@ -195,18 +214,18 @@ USE VETERINARIA;
  SHOW TABLES;
  DESCRIBE PACIENTE;
  INSERT INTO PACIENTE ( idUsuarioFK,idPaciente, nombrePaciente, apellidoPaciente, direccionPaciente, telefonoPaciente, fechaNacimiento,estadoPaciente)
- VALUES ('1000216054','1000216054','Daniela','Mora','calle 13 N14-38', '3053714069','2002/*10/*12','1');
+ VALUES ('1000216054','1000216054','Daniela','Mora','calle 13 N14-38', '3053714069','2002-12-10','1');
  INSERT INTO PACIENTE ( idUsuarioFK,idPaciente, nombrePaciente, apellidoPaciente, direccionPaciente, telefonoPaciente, fechaNacimiento, estadoPaciente)
- VALUES ('1000621051','1000621051','Nataly','Porras','diag 24 N45-78','3235648520','2005/*12/*06','1');
+ VALUES ('1000621051','1000621051','Nataly','Porras','diag 24 N45-78','3235648520','19895-10-01','1');
  
   /*INSERTAR LOS REGISTROS DE LA TABLA AGENDA*/
 USE VETERINARIA;
  SHOW TABLES;
  DESCRIBE AGENDA;
-INSERT INTO AGENDA (idMedicoFK,idPacienteFK,IdAgenda,fechaAgenda,horaAgenda,consultorio,estadoAgenda)
-VALUES ('10741583747','1000216054','1','2020/07/12','2020/07/12 5:30','1','1');
-INSERT INTO  AGENDA (idMedicoFK,idPacienteFK,IdAgenda,fechaAgenda,horaAgenda,consultorio,estadoAgenda)
-VALUES ('10741583747','1000621051','2','2020/10/12','2020/10/12 5:30','3','1');
+INSERT INTO AGENDA (idMedicoFK,idPacienteFK,IdAgenda,fechaHoraAgenda,consultorio,estadoAgenda)
+VALUES ('10741583747','1000216054','1','2020-07-12 10:00:00','1','1');
+INSERT INTO  AGENDA (idMedicoFK,idPacienteFK,IdAgenda,fechaHoraAgenda,consultorio,estadoAgenda)
+VALUES ('10741583747','1000621051','2','2020-10-12 05:30:00','3','1');
 
 /*INSERTAR LOS REGISTROS DE LA TABLA HISTORIA_CLINICA*/
 USE VETERINARIA;
@@ -222,18 +241,18 @@ USE VETERINARIA;
  SHOW TABLES;
  DESCRIBE EXAMEN;
  INSERT INTO EXAMEN (idHistoriaFK,idExamen,valor,fechaExamen,tipoExamen)
- VALUES ('1','1','100','2020/*08/*25','Radiografia');
+ VALUES ('1','1','100','2020-08-25 09:30:00','Radiografia');
  INSERT INTO EXAMEN (idHistoriaFK,idExamen,valor,fechaExamen,tipoExamen)
- VALUES ('2','2','50.000','2020/*08/*25','Radiografia panorámica');
+ VALUES ('2','2','50.000','2020-08-25 12:30:00','Radiografia panorámica');
  
  /*INSERTAR REGISTROS DE LA TABLA CONSULTA_MEDICA*/
 USE VETERINARIA;
  SHOW TABLES;
  DESCRIBE CONSULTA_MEDICA;
  INSERT INTO CONSULTA_MEDICA (idHistoriaFK,IdConsulta,HoraAtencion,MotivoConsulta,Enfermedad)
- VALUES ('1','1','2020/*07/*12 08:10','Dolor','NA');
+ VALUES ('1','1','2020-07-12 08:10:00','Dolor','NA');
  INSERT INTO CONSULTA_MEDICA (idHistoriaFK,IdConsulta,HoraAtencion,MotivoConsulta,Enfermedad)
- VALUES ('2','2','2020/*10/*12 09:10','Dolor','NA');
+ VALUES ('2','2','2020-10-12 09:10:00','Dolor','NA');
  
  /*INSERTAR REGISTROS DE LA TABLA DIAGNOSTICO*/
 USE VETERINARIA;
@@ -253,3 +272,22 @@ USE VETERINARIA;
  SELECT * FROM HISTORIA_CLINICA;
  SELECT * FROM EXAMEN;
  SELECT * FROM DIAGNOSTICO;
+ 
+ /*CONSULTAS */
+SELECT COUNT(*) AS 'Existing data' FROM USUARIO WHERE idUsuario='1000216054' AND passwordUsuario='dani865';
+SELECT COUNT(*) AS 'Existing quantity' FROM USUARIO WHERE idUsuario='100021604';
+SELECT rolUsuario FROM USUARIO WHERE idUsuario='1000216054';
+SELECT rolUsuario, estadoUsuario FROM USUARIO WHERE idUsuario='1234567';
+
+/*CREATE PROCEDURE `validateLoginRole` (IN `NumiD` VARCHAR(15))  BEGIN
+	SELECT idRolFK 
+	FROM usuarios
+	WHERE NumeroIdentificacion=Numid;
+END$$*/
+
+DESCRIBE USUARIO;
+
+
+SELECT COUNT(*) AS RESULTADO FROM USUARIO WHERE idUsuario='1000216054' AND passwordUsuario='dani865' AND rolUsuario='Paciente' AND estadoUsuario=1;
+SELECT idRolFK FROM USUARIO WHERE idUsuario='1000216054';
+
