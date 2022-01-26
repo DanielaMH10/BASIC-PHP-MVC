@@ -66,7 +66,7 @@ class User {
         $status=1;
         $model = new Conexion();
         $connection = $model->getConection();					
-        $sql="SELECT rolUsuario FROM USUARIO WHERE idUsuario='".$identnumberUser."'";
+        $sql="SELECT idRolFK FROM USUARIO WHERE idUsuario='".$identnumberUser."'";
         $statement=$connection->prepare($sql);			
         $statement->execute();
         while ($result=$statement->fetch()) {

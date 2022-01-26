@@ -38,7 +38,7 @@ if(isset($_POST['Document']) && isset($_POST['Pass'])){
       $rows = $obUser->validateLogin($user);
       if (is_array($rows) || is_object($rows))
         {foreach($rows as $row) {
-          $role=$row['rolUsuario'];
+          $role=$row['idRolFK'];
         }
       }else{
         $role ="0";
@@ -61,16 +61,31 @@ if(isset($_POST['Document']) && isset($_POST['Pass'])){
       $rolRecepcionista = 1;
       if($role == '1' && $UQuantity == "1" ){
         die();
-        header('location: inicioRecepcionista.php');
+        header('location: Usermenu-view.php');
       }
       else if($role == '2' && $UQuantity == "1"){
         die();
-        header('location: inicioInstructor.php');
+        header('location: Usermenu2-view.php.php');
       }
-      else if($user=="" || $password==""){
+      else if($user=="" || $password==""){}
         echo('<script>swal("Error!", "Debe ingresar datos al formulario para iniciar sesión","error")</script>');
       }else if($existenceUser=='0'){
-        echo('<script>swal("Error!", "Usuario no registrado en el sistema","error")</script>');
+        echo "<script>
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        Toast.fire({
+          icon: 'error',
+          title: 'Usuario no registrado en el sistema'
+        })</script>";
       }else if($UQuantity!= '1' && $quantity=="0"){
         echo('<script>swal("Error!", "Datos ingresados erroneos, intentelo nuevamente","error")</script>');
       }else if($stateU=='0' && $quantity=="1"){
