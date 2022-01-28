@@ -12,4 +12,5 @@
 <link rel="stylesheet" type="text/css" href="assets/vendor/daterangepicker/daterangepicker.css">
 <link rel="stylesheet" type="text/css" href="assets/css/util.css">
 <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+<link rel="stylesheet" type="text/css" href="assets/plugins/sweetalert2/dist/sweetalert2.min.css">
 <title>Login || Sign-in</title>

@@ -94,7 +94,7 @@ if(isset($_POST['Document']) && isset($_POST['Pass'])){
     }
   }
 ?>
-
+<?php include FOLDER_TEMPLATE . 'scriptsLogin.php' ?>
 </body>
 </html>
 

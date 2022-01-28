@@ -7,5 +7,4 @@
 <script src="assets/vendor/daterangepicker/daterangepicker.js"></script>
 <script src="assets/vendor/countdowntime/countdowntime.js"></script>
 <script src="assets/js/main.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="assets/plugins/sweetalert2/dist/sweetalert2.all.min.js"></script>
